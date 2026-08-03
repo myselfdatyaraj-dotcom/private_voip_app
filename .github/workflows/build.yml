@@ -23,16 +23,71 @@ jobs:
       with:
         channel: 'stable'
 
-    - name: Generate Custom Android Setup
+    - name: Generate Android Setup & Fix pubspec
       run: |
-        rm -rf android
         flutter create --platforms=android --org com.control.private_voip_app .
         
-        # Patch build.gradle for WebRTC compatibility
-        sed -i 's/compileSdkVersion .*/compileSdkVersion 34/g' android/app/build.gradle || true
-        sed -i 's/targetSdkVersion .*/targetSdkVersion 34/g' android/app/build.gradle || true
-        sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle || true
-        sed -i 's/flutter.minSdkVersion/21/g' android/app/build.gradle || true
+        # Ensure pubspec.yaml has correct SDK constraints and dependencies
+        cat << 'EOF' > pubspec.yaml
+        name: private_voip_app
+        description: "Private Encrypted Communication App"
+        publish_to: 'none'
+        version: 1.0.0+1
+
+        environment:
+          sdk: '>=3.0.0 <4.0.0'
+
+        dependencies:
+          flutter:
+            sdk: flutter
+          cupertino_icons: ^1.0.6
+          flutter_webrtc: ^0.12.0
+          web_socket_channel: ^3.0.0
+
+        dev_dependencies:
+          flutter_test:
+            sdk: flutter
+          flutter_lints: ^3.0.0
+
+        flutter:
+          uses-material-design: true
+        EOF
+
+    - name: Write Working build.gradle
+      run: |
+        cat << 'EOF' > android/app/build.gradle
+        plugins {
+            id "com.android.application"
+            id "kotlin-android"
+            id "dev.flutter.flutter-gradle-plugin"
+        }
+
+        android {
+            namespace "com.control.private_voip_app"
+            compileSdk 34
+
+            defaultConfig {
+                applicationId "com.control.private_voip_app"
+                minSdk 21
+                targetSdk 34
+                versionCode 1
+                versionName "1.0"
+            }
+
+            compileOptions {
+                sourceCompatibility JavaVersion.VERSION_17
+                targetCompatibility JavaVersion.VERSION_17
+            }
+
+            kotlinOptions {
+                jvmTarget = '17'
+            }
+        }
+
+        flutter {
+            source "../.."
+        }
+        EOF
 
     - name: Install dependencies
       run: flutter pub get
@@ -44,5 +99,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: app-release
-        path: build/app/outputs/flutter-apk/app-release.apk
-        
+        path: build/app/outp
