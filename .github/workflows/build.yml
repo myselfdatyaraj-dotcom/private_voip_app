@@ -15,7 +15,7 @@ jobs:
     - name: Set up Java
       uses: actions/setup-java@v4
       with:
-        distribution: 'zulu'
+        distribution: 'temurin'
         java-version: '17'
 
     - name: Set up Flutter
@@ -23,14 +23,16 @@ jobs:
       with:
         channel: 'stable'
 
-    - name: Generate Android Skeleton Files
-      run: flutter create --platforms=android .
+    - name: Generate Fresh Android Setup
+      run: |
+        rm -rf android
+        flutter create --platforms=android .
 
     - name: Install dependencies
       run: flutter pub get
 
     - name: Build APK
-      run: flutter build apk --release
+      run: flutter build apk --release --no-tree-shake-icons
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
