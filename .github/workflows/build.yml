@@ -23,15 +23,14 @@ jobs:
       with:
         channel: 'stable'
 
-    - name: Clean & Re-create Android Folder
+    - name: Generate Custom Android Setup
       run: |
         rm -rf android
-        flutter create --platforms=android --org com.control .
+        flutter create --platforms=android --org com.control.private_voip_app .
         
-    - name: Patch Gradle Properties & MinSDK
-      run: |
-        echo "android.useAndroidX=true" >> android/gradle.properties
-        echo "android.enableJetifier=true" >> android/gradle.properties
+        # Patch build.gradle for WebRTC compatibility
+        sed -i 's/compileSdkVersion .*/compileSdkVersion 34/g' android/app/build.gradle || true
+        sed -i 's/targetSdkVersion .*/targetSdkVersion 34/g' android/app/build.gradle || true
         sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle || true
         sed -i 's/flutter.minSdkVersion/21/g' android/app/build.gradle || true
 
