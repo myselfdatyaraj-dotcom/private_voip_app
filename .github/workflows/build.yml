@@ -23,13 +23,15 @@ jobs:
       with:
         channel: 'stable'
 
-    - name: Generate Fresh Android Project
+    - name: Clean & Re-create Android Folder
       run: |
         rm -rf android
-        flutter create --platforms=android --org com.example .
-
-    - name: Configure WebRTC MinSDK and Java Options
+        flutter create --platforms=android --org com.control .
+        
+    - name: Patch Gradle Properties & MinSDK
       run: |
+        echo "android.useAndroidX=true" >> android/gradle.properties
+        echo "android.enableJetifier=true" >> android/gradle.properties
         sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle || true
         sed -i 's/flutter.minSdkVersion/21/g' android/app/build.gradle || true
 
