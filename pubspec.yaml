@@ -1,22 +1,7 @@
-name: private_voip_app
-description: "Private Encrypted Communication App"
-publish_to: 'none'
-version: 1.0.0+1
-
-environment:
-  sdk: '>=3.0.0 <4.0.0'
-
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.6
-  flutter_webrtc: ^0.9.48
-  web_socket_channel: ^2.4.1
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^3.0.0
-
-flutter:
-  uses-material-design: true
+  flutter_webrtc: ^0.12.0
+  web_socket_channel: ^3.0.0
+  
