@@ -53,8 +53,9 @@ jobs:
           uses-material-design: true
         EOF
 
-    - name: Write Working build.gradle with SDK 36
+    - name: Force Write build.gradle with SDK 36
       run: |
+        rm -f android/app/build.gradle
         cat << 'EOF' > android/app/build.gradle
         plugins {
             id "com.android.application"
