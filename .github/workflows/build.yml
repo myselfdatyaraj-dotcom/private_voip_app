@@ -53,7 +53,7 @@ jobs:
           uses-material-design: true
         EOF
 
-    - name: Write Working build.gradle with SDK 35
+    - name: Write Working build.gradle with SDK 36
       run: |
         cat << 'EOF' > android/app/build.gradle
         plugins {
@@ -64,12 +64,12 @@ jobs:
 
         android {
             namespace "com.control.private_voip_app"
-            compileSdk 35
+            compileSdk 36
 
             defaultConfig {
                 applicationId "com.control.private_voip_app"
                 minSdk 21
-                targetSdk 35
+                targetSdk 36
                 versionCode 1
                 versionName "1.0"
             }
