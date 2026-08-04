@@ -23,21 +23,16 @@ jobs:
       with:
         channel: 'stable'
 
+    - name: Clean & Recreate Android Folder with v2 Embedding
+      run: |
+        rm -rf android
+        flutter create --platforms=android --org com.control.private_voip_app .
+
     - name: Force Fix SDK to 36 in build.gradle
       run: |
         sed -i 's/compileSdk [0-9]*/compileSdk 36/g' android/app/build.gradle
         sed -i 's/targetSdk [0-9]*/targetSdk 36/g' android/app/build.gradle
         sed -i 's/compileSdkVersion [0-9]*/compileSdkVersion 36/g' android/app/build.gradle
-
-    - name: Fix Android v1 Embedding to v2
-      run: |
-        MANIFEST_PATH="android/app/src/main/AndroidManifest.xml"
-        if [ -f "$MANIFEST_PATH" ]; then
-          sed -i '/<application/a \
-              <meta-data\
-                  android:name="flutterEmbedding"\
-                  android:value="2" />' "$MANIFEST_PATH"
-        fi
 
     - name: Install dependencies
       run: flutter pub get
