@@ -29,6 +29,16 @@ jobs:
         sed -i 's/targetSdk [0-9]*/targetSdk 36/g' android/app/build.gradle
         sed -i 's/compileSdkVersion [0-9]*/compileSdkVersion 36/g' android/app/build.gradle
 
+    - name: Fix Android v1 Embedding to v2
+      run: |
+        MANIFEST_PATH="android/app/src/main/AndroidManifest.xml"
+        if [ -f "$MANIFEST_PATH" ]; then
+          sed -i '/<application/a \
+              <meta-data\
+                  android:name="flutterEmbedding"\
+                  android:value="2" />' "$MANIFEST_PATH"
+        fi
+
     - name: Install dependencies
       run: flutter pub get
 
