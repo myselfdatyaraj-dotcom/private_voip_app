@@ -53,7 +53,7 @@ jobs:
           uses-material-design: true
         EOF
 
-    - name: Write Working build.gradle
+    - name: Write Working build.gradle with SDK 35
       run: |
         cat << 'EOF' > android/app/build.gradle
         plugins {
