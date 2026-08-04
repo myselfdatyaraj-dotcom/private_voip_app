@@ -53,8 +53,9 @@ jobs:
           uses-material-design: true
         EOF
 
-    - name: Write Working build.gradle
+    - name: Completely Overwrite build.gradle with SDK 36
       run: |
+        rm -f android/app/build.gradle
         cat << 'EOF' > android/app/build.gradle
         plugins {
             id "com.android.application"
@@ -64,12 +65,12 @@ jobs:
 
         android {
             namespace "com.control.private_voip_app"
-            compileSdk 34
+            compileSdk 36
 
             defaultConfig {
                 applicationId "com.control.private_voip_app"
                 minSdk 21
-                targetSdk 34
+                targetSdk 36
                 versionCode 1
                 versionName "1.0"
             }
@@ -88,11 +89,6 @@ jobs:
             source "../.."
         }
         EOF
-
-    - name: Force Fix SDK to 36 to Prevent WebRTC Error
-      run: |
-        sed -i 's/compileSdk 34/compileSdk 36/g' android/app/build.gradle
-        sed -i 's/targetSdk 34/targetSdk 36/g' android/app/build.gradle
 
     - name: Install dependencies
       run: flutter pub get
